@@ -1,0 +1,13 @@
+<lrt-class-results
+  *ngIf="competitionId && className; else queryParameterBox"
+  [competitionId]="competitionId"
+  [className]="className"
+></lrt-class-results>
+
+<ng-template #queryParameterBox>
+  <div>
+    <h2>Query Parameters</h2>
+    <p><b>competitionId</b>{{ competitionId }}</p>
+    <p><b>className</b>{{ className }}</p>
+  </div>
+</ng-template>

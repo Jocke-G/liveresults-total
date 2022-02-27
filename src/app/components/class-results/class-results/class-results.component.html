@@ -1,0 +1,8 @@
+<lrt-class-results-collection
+  *ngIf="classResults; else loader"
+  [results]="classResults.results"
+></lrt-class-results-collection>
+
+<ng-template #loader>
+  <mat-progress-bar mode="indeterminate" ></mat-progress-bar>
+</ng-template>
