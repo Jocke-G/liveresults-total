@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import {
-  LiveresultsService,
-} from './liveresults/services';
+import { ResultPipe } from './result.pipe';
+import { TimePipe } from './time.pipe';
 
 
 
 @NgModule({
-  providers: [
-    LiveresultsService,
-  ],
   declarations: [
+    ResultPipe,
+    TimePipe,
   ],
   imports: [
     CommonModule,
   ],
   exports: [
-  ],
+    ResultPipe,
+    TimePipe,
+  ]
 })
-export class ServicesModule { }
+export class SharedModule { }

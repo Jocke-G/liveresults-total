@@ -1,6 +1,6 @@
 import {
   Result,
-} from "../models";
+} from '../models';
 
 export interface ClassResults {
   status: string;

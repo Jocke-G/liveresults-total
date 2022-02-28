@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatTableModule } from '@angular/material/table';
 
 import { ClassResultsModule } from './class-results/class-results.module';
+import { TotalClassResultsModule } from './total-class-results/total-class-results.module';
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+  ],
   imports: [
     CommonModule,
   ],
   exports: [
     ClassResultsModule,
-  ]
+    TotalClassResultsModule,
+  ],
 })
 export class ComponentsModule { }

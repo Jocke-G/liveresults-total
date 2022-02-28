@@ -1,0 +1,32 @@
+<table mat-table [dataSource]="dataSource" class="full-table">
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Namn</th>
+    <td mat-cell *matCellDef="let result">{{ result.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="club">
+    <th mat-header-cell *matHeaderCellDef>Klubb</th>
+    <td mat-cell *matCellDef="let result">{{ result.club }}</td>
+  </ng-container>
+
+  <ng-container *ngFor="let competitionId of competitionIds" [matColumnDef]="competitionId">
+    <th mat-header-cell *matHeaderCellDef>{{competitionId}}</th>
+    <td mat-cell *matCellDef="let result">{{ result.results.get(competitionId) | result }}</td>
+    <!-- <td mat-cell *matCellDef="let result">{{ result.results.get(competitionId) | json }}</td> -->
+  </ng-container>
+
+  <ng-container matColumnDef="total">
+    <th mat-header-cell *matHeaderCellDef>total</th>
+    <td mat-cell *matCellDef="let result">{{ result.total | time }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="json">
+    <th mat-header-cell *matHeaderCellDef>JSON</th>
+    <td mat-cell *matCellDef="let result">{{ result | json }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>

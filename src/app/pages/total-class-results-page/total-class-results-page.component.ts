@@ -3,14 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'lrt-class-results-page',
-  templateUrl: './class-results-page.component.html',
-  styleUrls: ['./class-results-page.component.scss']
+  selector: 'lrt-total-class-results-page',
+  templateUrl: './total-class-results-page.component.html',
+  styleUrls: ['./total-class-results-page.component.scss']
 })
-export class ClassResultsPageComponent implements OnInit, OnDestroy {
+export class TotalClassResultsPageComponent implements OnInit, OnDestroy {
 
   className: string;
-  competitionId: string;
+  competitionIds: string[];
 
   private _destroy$ = new Subject();
 
@@ -31,7 +31,7 @@ export class ClassResultsPageComponent implements OnInit, OnDestroy {
       )
       .subscribe(params => {
         this.className = params['className'];
-        this.competitionId = params['competitionId'];
+        this.competitionIds = params['competitionIds']?.split(',');
       }
     );
   }
