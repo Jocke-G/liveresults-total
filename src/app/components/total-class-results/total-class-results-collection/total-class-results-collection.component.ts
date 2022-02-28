@@ -14,7 +14,7 @@ export class TotalClassResultsCollectionComponent {
     this.dataSource.data = results;
   }
   @Input() competitionIds: string[];
-  @Input() displayedColumns: string[] = ['name', 'club', '19908','19915', 'total',];
+  @Input() displayedColumns: string[] = ['name', 'club', '19891', '19908','19915', 'total',];
 
   dataSource: MatTableDataSource<TotalResult> = new MatTableDataSource();
 }

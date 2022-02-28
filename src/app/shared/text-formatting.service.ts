@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { Result } from 'src/app/services/liveresults/models/result';
+import { Result, ResultStatus } from 'src/app/services/liveresults/models/result';
+import { StageResult } from '../components/total-class-results/stage-result';
 
 @Injectable({
   providedIn: 'root'
@@ -49,8 +50,19 @@ export class TextFormattingService {
     if(!result) {
       return "-";
     }
-    if(result.status === 0) {
+    if(result.status === ResultStatus.OK) {
       return this.formatTime(parseInt(result.result));
+    } else {
+      return this.formatStatus(result.status);
+    }
+  }
+
+  formatStageResult(result: StageResult) {
+    if(!result) {
+      return "-";
+    }
+    if(result.status === ResultStatus.OK) {
+      return this.formatTime(result.time);
     } else {
       return this.formatStatus(result.status);
     }
