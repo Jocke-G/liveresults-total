@@ -1,7 +1,8 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, Observable, forkJoin, map, tap } from 'rxjs';
 
 import {
+  ClassResults,
   Result,
 } from 'src/app/services/liveresults/models';
 import { LiveresultsService } from 'src/app/services/liveresults/services';
@@ -18,8 +19,7 @@ export class TotalClassResultsComponent implements OnInit, OnDestroy {
   @Input() className: string;
   @Input() competitionIds: string[];
 
-  results: TotalResult[] = [];
-  outResults$: Subject<TotalResult[]> = new Subject<TotalResult[]>();
+  outResults$: Observable<TotalResult[]>
 
   private _destroy$ = new Subject();
 
@@ -30,29 +30,45 @@ export class TotalClassResultsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.competitionIds.forEach(competitionId => {
+    const classResultsList$: Observable<[string, ClassResults]>[] = this.competitionIds.map(competitionId =>
       this.service.getClassResults(competitionId, this.className, true)
       .pipe(
-        takeUntil(this._destroy$),
+        map(_ => {
+          var tuple: [string, ClassResults] = [competitionId, _];
+          return tuple;
+        })
       )
-      .subscribe(classResults => {
-        classResults.results.forEach(result => {
-          const existingResult = this.results.find(x => x.name == result.name && x.club == result.club)
-          if(existingResult) {
-            this.appendResult(existingResult, competitionId, result);
-          } else {
-            this.results.push(this.createTotalResult(competitionId, result))
-          }
-        });
-        console.log(this.results);
-        this.outResults$.next([...this.results.sort(this.compareService.compareTotalResults(this.competitionIds))]);
-      })
-    })
+    );
+    const classResults$: Observable<[string, ClassResults][]> = forkJoin(classResultsList$);
+
+    this.outResults$ = classResults$.pipe(
+      map((tuples: [string, ClassResults][]) => {
+        const res = tuples.reduce((previousValue, currentValue) => this.merge(previousValue, currentValue), [] as TotalResult[])
+        res.map(_ => this.recalculateResult(_))
+        return res.sort(this.compareService.compareTotalResults(this.competitionIds));
+      }),
+      tap(_ => console.log(_)),
+    );
+  }
+
+  private merge(previous: TotalResult[], current: [string, ClassResults]) {
+    current[1].results.forEach(result => {
+      this.add(previous, result, current[0])
+    });
+    return previous;
+  }
+
+  private add(previous: TotalResult[], current: Result, competitionId: string) {
+    const existingResult = previous.find(x => x.name == current.name && x.club == current.club)
+    if(existingResult) {
+      this.appendResult(existingResult, competitionId, current);
+    } else {
+      previous.push(this.createTotalResult(competitionId, current))
+    }
   }
 
   private appendResult(existingResult: TotalResult, competitionId: string, result: Result) {
     existingResult.results.set(competitionId, result);
-    this.recalculateResult(existingResult);
   }
 
   private recalculateResult(result: TotalResult) {
@@ -70,7 +86,6 @@ export class TotalClassResultsComponent implements OnInit, OnDestroy {
       name: result.name,
       results: new Map([[competitionId, result]]),
     };
-    this.recalculateResult(totalResult);
     return totalResult;
   }
 
