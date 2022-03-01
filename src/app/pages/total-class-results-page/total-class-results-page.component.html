@@ -1,0 +1,17 @@
+<lrt-total-class-results
+  *ngIf="competitionIds && competitionIds.length > 0 && className; else queryParameterBox"
+  [competitionIds]="competitionIds"
+  [className]="className"
+  [stageColumns]="stageColumns"
+  [totalColumns]="totalColumns"
+></lrt-total-class-results>
+
+<ng-template #queryParameterBox>
+  <div>
+    <h2>Query Parameters</h2>
+    <p><b>competitionIds</b>{{ competitionIds }}</p>
+    <p><b>className</b>{{ className }}</p>
+    <p><b>stageColumns</b>{{ stageColumns }}</p>
+    <p><b>totalColumns</b>{{ totalColumns }}</p>
+  </div>
+</ng-template>

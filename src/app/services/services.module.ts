@@ -8,13 +8,15 @@ import {
 
 
 @NgModule({
+  providers: [
+    LiveresultsService,
+  ],
   declarations: [
   ],
   imports: [
     CommonModule,
   ],
   exports: [
-    LiveresultsService,
   ],
 })
 export class ServicesModule { }

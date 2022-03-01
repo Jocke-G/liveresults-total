@@ -1,9 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
-import {
-  Result,
-} from 'src/app/services/liveresults/models';
+import { Result } from 'src/app/services/liveresults/models/result';
 
 @Component({
   selector: 'lrt-class-results-collection',
