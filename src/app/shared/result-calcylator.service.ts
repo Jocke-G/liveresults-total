@@ -6,7 +6,6 @@ import { ResultStatus } from '../services/liveresults/models/result';
   providedIn: 'root'
 })
 export class ResultCalcylateService {
-
   recalculateResult(totalResult: TotalResult, competitionIds: string[]) {
     let totalOk = true;
     let totalTime = 0;
@@ -22,7 +21,6 @@ export class ResultCalcylateService {
       }
       if(result.status !== ResultStatus.OK) {
         result.totalOk = false;
-        result.totalTime = 0;
         totalOk = false;
         continue;
       }
@@ -31,7 +29,9 @@ export class ResultCalcylateService {
       result.totalTime = totalTime;
       result.totalOk = true
     }
-    totalResult.totalTime = totalOk?totalTime:0;
+    if(totalOk) {
+      totalResult.totalTime = totalTime;
+    }
     totalResult.totalOk = totalOk;
   }
 }

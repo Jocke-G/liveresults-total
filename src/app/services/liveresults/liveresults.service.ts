@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-  ClassResults,
+  ClassResult,
   CompetitionInfo,
 } from './models';
 
@@ -18,8 +18,8 @@ export class LiveresultsService {
   ) {
   }
 
-  getClassResults(competitionId: string, className: string, unformattedTimes: boolean = false): Observable<ClassResults> {
-    return this.http.get<ClassResults>(`${this.rootUrl}/api.php?method=getclassresults&comp=${competitionId}&class=${className}&unformattedTimes=${unformattedTimes?'true':'false'}`);
+  getClassResults(competitionId: string, className: string, unformattedTimes: boolean = false): Observable<ClassResult> {
+    return this.http.get<ClassResult>(`${this.rootUrl}/api.php?method=getclassresults&comp=${competitionId}&class=${className}&unformattedTimes=${unformattedTimes?'true':'false'}`);
   }
 
   getCompetitionInfo(competitionId: string): Observable<CompetitionInfo> {

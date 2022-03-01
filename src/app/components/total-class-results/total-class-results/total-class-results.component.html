@@ -1,5 +1,11 @@
-<lrt-total-class-results-collection
-  *ngIf="(outResults$ | async) as outResults"
-  [results]="outResults"
-  [competitionIds]="competitionIds"
+<ng-container *ngIf="{results: results$ | async , competitions: competitions$ | async} as nested">
+  <lrt-total-class-results-collection
+  *ngIf="nested.results && nested.competitions"
+  [results]="nested.results"
+  [competitions]="nested.competitions"
+  [displayedColumns]="displayedColumns"
+  [stageColumns]="stageColumns"
+  [totalColumns]="totalColumns"
 ></lrt-total-class-results-collection>
+
+</ng-container>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TotalResult } from '../components/total-class-results/total-result';
-import { ClassResults, Result } from '../services/liveresults/models';
+import { ClassResult, Result } from '../services/liveresults/models';
+import { ResultStatus } from '../services/liveresults/models/result';
 import { StageResult } from './../components/total-class-results/stage-result';
 
 @Injectable({
@@ -8,7 +9,7 @@ import { StageResult } from './../components/total-class-results/stage-result';
 })
 export class TotalResultConverterService {
 
-  merge(totalResults: TotalResult[], current: [string, ClassResults]) {
+  merge(totalResults: TotalResult[], current: [string, ClassResult]) {
     current[1].results.forEach(result => {
       this.addStageResult(totalResults, result, current[0])
     });
@@ -39,7 +40,9 @@ export class TotalResultConverterService {
   private createStageResult(result: Result): StageResult {
     return <StageResult>{
       status: result.status,
-      time: parseInt(result.result),
+      place: result.status===ResultStatus.OK?parseInt(result.place):undefined,
+      time: result.status===ResultStatus.OK?parseInt(result.result):undefined,
+      timePlus: result.status===ResultStatus.OK?parseInt(result.timeplus):undefined,
     }
   }
 }

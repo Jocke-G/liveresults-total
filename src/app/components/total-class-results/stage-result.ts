@@ -1,8 +1,12 @@
-import { ResultStatus } from "../../services/liveresults/models/result";
+import { ResultStatus } from "src/app/services/liveresults/models/result";
 
 export interface StageResult {
-  time: number;
   status: ResultStatus;
-  totalTime: number;
+  time: number;
+  place: number;
+  timePlus: number;
+
   totalOk: boolean;
+  totalTime: number;
+  totalPlus: number;
 }

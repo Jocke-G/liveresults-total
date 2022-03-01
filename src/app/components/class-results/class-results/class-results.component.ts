@@ -2,7 +2,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import {
-  ClassResults,
+  ClassResult,
 } from 'src/app/services/liveresults/models';
 import {
   LiveresultsService,
@@ -18,7 +18,7 @@ export class ClassResultsComponent implements OnInit, OnDestroy {
   @Input() competitionId: string;
   @Input() className: string;
 
-  classResults: ClassResults;
+  classResults: ClassResult;
 
   private _destroy$ = new Subject();
 

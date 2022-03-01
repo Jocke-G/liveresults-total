@@ -2,7 +2,7 @@ import {
   Result,
 } from '../models';
 
-export interface ClassResults {
+export interface ClassResult {
   status: string;
   className: string;
   splitcontrols: any[];

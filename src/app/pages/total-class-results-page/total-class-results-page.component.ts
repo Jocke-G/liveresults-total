@@ -11,6 +11,8 @@ export class TotalClassResultsPageComponent implements OnInit, OnDestroy {
 
   className: string;
   competitionIds: string[];
+  stageColumns: string[];
+  totalColumns: string[];
 
   private _destroy$ = new Subject();
 
@@ -32,6 +34,8 @@ export class TotalClassResultsPageComponent implements OnInit, OnDestroy {
       .subscribe(params => {
         this.className = params['className'];
         this.competitionIds = params['competitionIds']?.split(',');
+        this.stageColumns = params['stageColumns']?params['stageColumns'].split(','):[];
+        this.totalColumns = params['totalColumns']?params['totalColumns'].split(','):[];
       }
     );
   }

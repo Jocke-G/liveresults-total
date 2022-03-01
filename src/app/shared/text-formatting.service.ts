@@ -8,8 +8,8 @@ import { StageResult } from '../components/total-class-results/stage-result';
 })
 export class TextFormattingService {
 
-  formatTime(value: number): string {
-    if(!value)
+  formatTime(value: number|undefined): string {
+    if(value === undefined || value === null)
       return '';
 
     var hours = Math.floor(value / (60 * 60 * 100));

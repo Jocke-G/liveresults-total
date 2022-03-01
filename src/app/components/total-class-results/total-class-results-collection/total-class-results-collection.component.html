@@ -10,16 +10,49 @@
     <td mat-cell *matCellDef="let result">{{ result.club }}</td>
   </ng-container>
 
-  <ng-container *ngFor="let competitionId of competitionIds" [matColumnDef]="competitionId">
-    <th mat-header-cell *matHeaderCellDef>{{competitionId}}</th>
-    <td mat-cell *matCellDef="let result">{{ result.results.get(competitionId) | stageResult }}</td>
-    <!-- <td mat-cell *matCellDef="let result">{{ result.results.get(competitionId) | json }}</td> -->
+  <ng-container *ngFor="let competition of competitions">
+    <ng-container [matColumnDef]="competition.id.toString()">
+      <th mat-header-cell *matHeaderCellDef
+          [attr.colspan]="stageColumns.length">
+          {{competition.name}}
+      </th>
+    </ng-container>
+
+    <ng-container [matColumnDef]="competition.id+'_place'">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString())?.place }}</td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="competition.id+'_time'">
+      <th mat-header-cell *matHeaderCellDef>Etapp</th>
+      <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString()) | stageResult }}</td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="competition.id+'_timePlus'">
+      <th mat-header-cell *matHeaderCellDef>Etapp+</th>
+      <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString())?.timePlus | timePlus }}</td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="competition.id+'_total'">
+      <th mat-header-cell *matHeaderCellDef>Totalt</th>
+      <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString())?.totalTime | time }}</td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="competition.id+'_totalPlus'">
+      <th mat-header-cell *matHeaderCellDef>Totalt+</th>
+      <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString())?.totalPlus | timePlus }}</td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="competition.id+'_json'">
+      <th mat-header-cell *matHeaderCellDef>JSON</th>
+      <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString()) | json }}</td>
+    </ng-container>
+
   </ng-container>
 
   <ng-container matColumnDef="total">
-    <th mat-header-cell *matHeaderCellDef>total</th>
+    <th mat-header-cell *matHeaderCellDef>Totaltid</th>
     <td mat-cell *matCellDef="let result">{{ result.totalTime | time }}</td>
-    <!-- <td mat-cell *matCellDef="let result">{{ result | json }}</td> -->
   </ng-container>
 
   <ng-container matColumnDef="json">
@@ -27,6 +60,25 @@
     <td mat-cell *matCellDef="let result">{{ result | json }}</td>
   </ng-container>
 
+  <ng-container matColumnDef="before-dummy">
+    <th mat-header-cell *matHeaderCellDef
+        [attr.colspan]="2">
+    </th>
+  </ng-container>
+
+  <ng-container *ngFor="let competition of competitions">
+
+
+  </ng-container>
+
+  <ng-container matColumnDef="after-dummy">
+    <th mat-header-cell *matHeaderCellDef
+        [attr.colspan]="totalColumns.length">
+      Totalt
+    </th>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedHeaderColumns"></tr>
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 

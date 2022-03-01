@@ -2,7 +2,8 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subject, Observable, forkJoin, map, tap, filter } from 'rxjs';
 
 import {
-  ClassResults,
+  ClassResult,
+  CompetitionInfo,
 } from 'src/app/services/liveresults/models';
 import { LiveresultsService } from 'src/app/services/liveresults/services';
 import { ResultCalcylateService } from 'src/app/shared/result-calcylator.service';
@@ -19,8 +20,12 @@ export class TotalClassResultsComponent implements OnInit, OnDestroy {
 
   @Input() className: string;
   @Input() competitionIds: string[];
+  @Input() stageColumns: string[];
+  @Input() totalColumns: string[];
 
-  outResults$: Observable<TotalResult[]>
+  displayedColumns: string[];
+  competitions$: Observable<CompetitionInfo[]>;
+  results$: Observable<TotalResult[]>;
 
   private _destroy$ = new Subject();
 
@@ -33,22 +38,31 @@ export class TotalClassResultsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const classResultsList$: Observable<[string, ClassResults]>[] = this.competitionIds.map(competitionId =>
+    this.competitions$ = this.getCompetitionInfo(this.competitionIds);
+
+    const classResultsList$: Observable<[string, ClassResult]>[] = this.competitionIds.map(competitionId =>
       this.service.getClassResults(competitionId, this.className, true)
       .pipe(
         filter(_ => !!_),
         map(result => [competitionId, result]),
       )
     );
-    const classResults$: Observable<[string, ClassResults][]> = forkJoin(classResultsList$);
+    const classResults$: Observable<[string, ClassResult][]> = forkJoin(classResultsList$);
 
-    this.outResults$ = classResults$.pipe(
-      map((tuples: [string, ClassResults][]) => {
-        const res = tuples.reduce((previousValue, currentValue) => this.convertService.merge(previousValue, currentValue), [] as TotalResult[])
-        res.map(_ => this.calculateService.recalculateResult(_, this.competitionIds))
+    this.results$ = classResults$.pipe(
+      map((tuples: [string, ClassResult][]) => {
+        const res = tuples.reduce((totalResults, classResult) => this.convertService.merge(totalResults, classResult), [] as TotalResult[])
+        res.map(totalResult => this.calculateService.recalculateResult(totalResult, this.competitionIds))
         return res.sort(this.compareService.compareTotalResults(this.competitionIds));
       }),
-      tap(_ => console.log(_)),
+    );
+  }
+
+  private getCompetitionInfo(competitionIds: string[]): Observable<CompetitionInfo[]> {
+    return forkJoin(
+      competitionIds.map(competitionId =>
+        this.service.getCompetitionInfo(competitionId)
+      )
     );
   }
 
