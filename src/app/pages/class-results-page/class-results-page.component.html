@@ -2,6 +2,7 @@
   *ngIf="competitionId && className; else queryParameterBox"
   [competitionId]="competitionId"
   [className]="className"
+  [refreshRate]="refreshRate"
 ></lrt-class-results>
 
 <ng-template #queryParameterBox>
@@ -9,5 +10,6 @@
     <h2>Query Parameters</h2>
     <p><b>competitionId</b>{{ competitionId }}</p>
     <p><b>className</b>{{ className }}</p>
+    <p><b>refreshRate</b>{{ refreshRate }}</p>
   </div>
 </ng-template>

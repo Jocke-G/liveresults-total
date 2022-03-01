@@ -1,4 +1,4 @@
-import { Subject, takeUntil } from 'rxjs';
+import { first, interval, Subject, takeUntil, Observable } from 'rxjs';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import {
@@ -17,8 +17,9 @@ export class ClassResultsComponent implements OnInit, OnDestroy {
 
   @Input() competitionId: string;
   @Input() className: string;
+  @Input() refreshRate: number|undefined;
 
-  classResults: ClassResult;
+  classResults$: Subject<ClassResult> = new Subject();
 
   private _destroy$ = new Subject();
 
@@ -27,18 +28,36 @@ export class ClassResultsComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  ngOnInit(): void {
-    this.service.getClassResults(this.competitionId, this.className)
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(classResults => {
-        this.classResults = classResults;
-      })
-  }
-
   ngOnDestroy(): void {
     this._destroy$.next(undefined);
     this._destroy$.complete();
+  }
+
+  ngOnInit(): void {
+    this.refreshData();
+    this.startTimer();
+  }
+
+  private refreshData(): void {
+    this.getData()
+      .pipe(
+        first(),
+      ).subscribe(classResult => {
+        this.classResults$.next(classResult);
+      })
+  }
+
+  private getData(): Observable<ClassResult> {
+    return this.service.getClassResults(this.competitionId, this.className);
+  }
+
+  private startTimer(): void {
+    if (this.refreshRate !== undefined) {
+      interval(this.refreshRate).pipe(
+        takeUntil(this._destroy$),
+      ).subscribe(n => {
+        this.refreshData();
+      });
+    }
   }
 }

@@ -11,6 +11,7 @@ export class TotalClassResultsPageComponent implements OnInit, OnDestroy {
 
   className: string;
   competitionIds: string[];
+  refreshRate: number|undefined;
   stageColumns: string[];
   totalColumns: string[];
 
@@ -33,9 +34,18 @@ export class TotalClassResultsPageComponent implements OnInit, OnDestroy {
       )
       .subscribe(params => {
         this.className = params['className'];
-        this.competitionIds = params['competitionIds']?.split(',');
-        this.stageColumns = params['stageColumns']?params['stageColumns'].split(','):[];
-        this.totalColumns = params['totalColumns']?params['totalColumns'].split(','):[];
+
+        const competitionIds = params['competitionIds']?.split(',').filter((_: string) => !!_);
+        this.competitionIds = competitionIds;
+
+        const refreshRate = Number(params['refreshRate']);
+        this.refreshRate = isNaN(refreshRate)?undefined:refreshRate;
+
+        const stageColumns = params['stageColumns']?.split(',').filter((_: string) => !!_);
+        this.stageColumns = stageColumns?stageColumns:[];
+
+        const totalColumns = params['totalColumns']?.split(',').filter((_: string) => !!_);
+        this.totalColumns = totalColumns?totalColumns:[];
       }
     );
   }

@@ -1,5 +1,5 @@
 <lrt-class-results-collection
-  *ngIf="classResults; else loader"
+  *ngIf="classResults$ | async as classResults; else loader"
   [results]="classResults.results"
 ></lrt-class-results-collection>
 

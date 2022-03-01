@@ -11,26 +11,29 @@ import { TotalResult } from '../total-result';
 })
 export class TotalClassResultsCollectionComponent implements OnChanges {
 
+  @Input() competitions: CompetitionInfo[];
   @Input() set results(results: TotalResult[]) {
     this.dataSource.data = results;
   }
-  @Input() competitions: CompetitionInfo[];
-  @Input() displayedColumns: string[] = ['name', 'club'];
   @Input() stageColumns: string[] = ['json',];
   @Input() totalColumns: string[] = ['json',];
 
-  displayedHeaderColumns: string[] = ['before-dummy', 'after-dummy'];
   dataSource: MatTableDataSource<TotalResult> = new MatTableDataSource();
+  displayedColumns: string[] = ['name', 'club'];
+  displayedHeaderColumns: string[] = ['before-dummy', 'after-dummy'];
 
-  ngOnChanges(changes: SimpleChanges) {
-    const competitions: CompetitionInfo[] = changes['competitions'].currentValue as CompetitionInfo[];
-    this.displayedHeaderColumns = ['before-dummy', ...competitions.map(competition => competition.id.toString()), 'after-dummy'];
+  ngOnChanges(changes: SimpleChanges): void {
+    const newCompetitions = changes['competitions'];
+    if(newCompetitions !== undefined) {
+      const competitions: CompetitionInfo[] = newCompetitions.currentValue as CompetitionInfo[];
+      this.displayedHeaderColumns = ['before-dummy', ...competitions.map(competition => competition.id.toString()), 'after-dummy'];
 
-    let competitionColumns: string[] = this.competitions
-      .map(competition=> this.getColumnsForCompetition(competition.id.toString(), this.stageColumns))
-      .reduce((accumulator, value) => accumulator.concat(value), []);
+      let competitionColumns: string[] = this.competitions
+        .map(competition=> this.getColumnsForCompetition(competition.id.toString(), this.stageColumns))
+        .reduce((accumulator, value) => accumulator.concat(value), []);
 
-    this.displayedColumns = ['name', 'club', ...competitionColumns, ...this.totalColumns];
+      this.displayedColumns = ['name', 'club', ...competitionColumns, ...this.totalColumns];
+      }
   }
 
   private getColumnsForCompetition(competitionId: string, columns: string[]): string[] {

@@ -11,7 +11,7 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: '/total?competitionIds=15210,15216,15219&className=H21&stageColumns=place,time,timePlus,total&totalColumns=total',
+        redirectTo: '/total?competitionIds=15210,15216,15219&className=H21&stageColumns=place,time,timePlus,total&totalColumns=total&refreshRate=5000',
       },
       {
         path: 'classResults',
