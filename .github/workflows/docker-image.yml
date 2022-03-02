@@ -1,12 +1,15 @@
+name: ci
+
 on:
   push:
     branches:
       - docker
+      - main
 
 jobs:
   docker:
     runs-on: ubuntu-latest
-    name: A job to build and push docker
+    name: Build and push docker
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -18,7 +21,7 @@ jobs:
           image: tonistiigi/binfmt:latest
           platforms: all
 
-      - name: Available platforms
+      - name: QEMU Available platforms
         run: echo ${{ steps.qemu.outputs.platforms }}
 
       - name: Set up Docker Buildx
@@ -35,11 +38,9 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64
-          #pull: true
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          pull: true
           push: true
-          #cache-from: type=registry,ref=hustakin/hello-world-docker-action:latest
-          #cache-to: type=inline
+          cache-from: type=registry,ref=jockeg/liveresults-total:latest
+          cache-to: type=inline
           tags: jockeg/liveresults-total:latest
-          #build-args: PROFILE=nectar,ARG2=test
-
