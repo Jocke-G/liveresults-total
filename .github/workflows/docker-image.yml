@@ -11,6 +11,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: all
+
+      - name: Available platforms
+        run: echo ${{ steps.qemu.outputs.platforms }}
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
@@ -32,4 +42,4 @@ jobs:
           #cache-to: type=inline
           tags: jockeg/liveresults-total:latest
           #build-args: PROFILE=nectar,ARG2=test
-          
+
