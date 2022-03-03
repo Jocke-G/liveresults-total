@@ -1,21 +1,25 @@
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import {
   ClassResult,
   CompetitionInfo,
 } from './models';
+import { EnvService } from './../environment/env.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LiveresultsService {
 
-  private rootUrl = 'https://liveresultat.orientering.se';
+  private rootUrl:string = '';
 
   constructor(
     private http: HttpClient,
+    envService: EnvService,
   ) {
+    this.rootUrl = envService.liveresultsServer;
   }
 
   getClassResults(competitionId: string, className: string, unformattedTimes: boolean = false): Observable<ClassResult> {

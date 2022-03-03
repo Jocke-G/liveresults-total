@@ -15,4 +15,10 @@ FROM nginx:alpine
 COPY --from=build-deps /usr/src/app/dist/liveresults-total /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+
+WORKDIR /usr/share/nginx/html
+COPY ./env.sh .
+RUN apk add --no-cache bash
+RUN chmod +x env.sh
+
+CMD ["/bin/bash", "-c", "/usr/share/nginx/html/env.sh && nginx -g \"daemon off;\""]
