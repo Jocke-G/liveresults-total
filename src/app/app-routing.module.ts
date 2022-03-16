@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { ClassResultsPageComponent } from './pages/class-results-page/class-results-page.component';
+import { StartPageComponent } from './pages/start-page/start-page.component';
 import { TotalClassResultsPageComponent } from './pages/total-class-results-page/total-class-results-page.component';
 
 const routes: Routes = [
@@ -11,7 +12,7 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: '/total?competitionIds=15210,15216,15219&className=H21&stageColumns=place,time,timePlus,total&totalColumns=total&refreshRate=5000',
+        component: StartPageComponent,
       },
       {
         path: 'classResults',

@@ -1,0 +1,13 @@
+<form>
+  <lrt-select-competition-autocomplete
+    *ngIf="competitions$ | async as competitions"
+    [competitions]="competitions"
+    (select)="onSelectCompetiton($event)"
+  ></lrt-select-competition-autocomplete>
+
+  <lrt-select-class-info-autocomplete
+    [classes]="(classes$ | async) || []"
+    (select)="onSelectClass($event)"
+  ></lrt-select-class-info-autocomplete>
+  <button mat-raised-button color="primary" (click)="onClick($event)">Gå</button>
+</form>

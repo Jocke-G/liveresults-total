@@ -5,6 +5,7 @@ import { ComponentsModule } from '../components/components.module';
 
 import { ClassResultsPageComponent } from './class-results-page/class-results-page.component';
 import { TotalClassResultsPageComponent } from './total-class-results-page/total-class-results-page.component';
+import { StartPageComponent } from './start-page/start-page.component';
 
 
 
@@ -12,6 +13,7 @@ import { TotalClassResultsPageComponent } from './total-class-results-page/total
   declarations: [
     ClassResultsPageComponent,
     TotalClassResultsPageComponent,
+    StartPageComponent,
   ],
   imports: [
     CommonModule,
