@@ -12,6 +12,7 @@ export class ClassResultsPageComponent implements OnInit, OnDestroy {
   className: string;
   competitionId: string;
   refreshRate: number|undefined;
+  columns: string[];
 
   private _destroy$ = new Subject();
 
@@ -36,6 +37,9 @@ export class ClassResultsPageComponent implements OnInit, OnDestroy {
 
         const refreshRate = Number(params['refreshRate']);
         this.refreshRate = isNaN(refreshRate)?undefined:refreshRate;
+
+        const columns = params['columns']?.split(',').filter((_: string) => !!_);
+        this.columns = columns?columns:[];
       }
     );
   }

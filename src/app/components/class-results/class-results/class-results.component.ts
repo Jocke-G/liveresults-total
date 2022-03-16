@@ -18,6 +18,7 @@ export class ClassResultsComponent implements OnInit, OnDestroy {
   @Input() competitionId: string;
   @Input() className: string;
   @Input() refreshRate: number|undefined;
+  @Input() columns: string[];
 
   classResults$: Subject<ClassResult> = new Subject();
 

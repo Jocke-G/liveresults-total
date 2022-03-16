@@ -1,6 +1,7 @@
 <lrt-class-results-collection
   *ngIf="classResults$ | async as classResults; else loader"
   [results]="classResults.results"
+  [displayedColumns]="columns"
 ></lrt-class-results-collection>
 
 <ng-template #loader>
