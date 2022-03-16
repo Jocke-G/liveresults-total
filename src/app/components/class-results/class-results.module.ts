@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
+import { SharedModule } from 'src/app/shared/shared.module';
 import { ClassResultsCollectionComponent } from './class-results-collection/class-results-collection.component';
 import { ClassResultsComponent } from './class-results/class-results.component';
 
@@ -16,6 +17,7 @@ import { ClassResultsComponent } from './class-results/class-results.component';
   ],
   imports: [
     CommonModule,
+    SharedModule,
     MatTableModule,
     MatProgressBarModule,
   ],
