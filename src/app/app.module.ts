@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PagesModule } from './pages/pages.module';
 import { EnvServiceProvider } from './services/environment/env.service.provider';
+import { RootStoreModule } from './store/root-store.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { EnvServiceProvider } from './services/environment/env.service.provider'
     AppRoutingModule,
     BrowserAnimationsModule,
     PagesModule,
+    RootStoreModule,
   ],
   providers: [
     {
