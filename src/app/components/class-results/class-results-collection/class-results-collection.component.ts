@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { map, Observable, interval } from 'rxjs';
+import { map, Observable, interval, startWith } from 'rxjs';
 
 import { Result } from 'src/app/services/liveresults/models/result';
 
@@ -22,6 +22,7 @@ export class ClassResultsCollectionComponent implements OnInit {
   ngOnInit(): void {
     this.time$ = interval(10)
       .pipe(
+        startWith(0),
         map(_ => {
           const date = new Date();
           const hours =  date.getHours() * 60 * 60;
