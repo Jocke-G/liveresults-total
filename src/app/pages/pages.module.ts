@@ -5,6 +5,7 @@ import { ComponentsModule } from '../components/components.module';
 
 import { ClassResultsPageComponent } from './class-results-page/class-results-page.component';
 import { TotalClassResultsPageComponent } from './total-class-results-page/total-class-results-page.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -16,6 +17,7 @@ import { TotalClassResultsPageComponent } from './total-class-results-page/total
   imports: [
     CommonModule,
     ComponentsModule,
+    MatDialogModule,
   ],
   exports: [
   ],

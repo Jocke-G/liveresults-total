@@ -1,0 +1,20 @@
+<mat-form-field class="example-full-width" appearance="fill">
+  <mat-label>Class</mat-label>
+  <input
+    type="text"
+    placeholder="Start typing..."
+    matInput
+    [formControl]="formControl"
+    [matAutocomplete]="auto"
+  >
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    [displayWith]="displayFn"
+    (optionSelected)="onOptionSelected($event)"
+  >
+    <mat-option
+      *ngFor="let classInfo of filteredClasses$ | async"
+      [value]="classInfo"
+    >{{ displayFn(classInfo) }}</mat-option>
+  </mat-autocomplete>
+</mat-form-field>

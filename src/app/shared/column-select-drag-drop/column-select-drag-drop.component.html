@@ -1,0 +1,27 @@
+<div class="example-container">
+  <h3>Not Selected</h3>
+  <span
+    cdkDropList
+    #doneList="cdkDropList"
+    [cdkDropListData]="notSelectedColumns"
+    [cdkDropListConnectedTo]="[todoList]"
+    class="example-list"
+    (cdkDropListDropped)="drop($event)"
+    >
+    <span class="example-box" *ngFor="let item of notSelectedColumns" cdkDrag>{{item}}</span>
+  </span>
+</div>
+
+<div class="example-container">
+  <h3>Selected</h3>
+    <div
+      cdkDropList
+      #todoList="cdkDropList"
+      [cdkDropListData]="selectedColumns"
+      [cdkDropListConnectedTo]="[doneList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)"
+    >
+    <div class="example-box" *ngFor="let item of selectedColumns" cdkDrag>{{item}}</div>
+  </div>
+</div>

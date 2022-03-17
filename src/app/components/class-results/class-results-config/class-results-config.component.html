@@ -1,0 +1,30 @@
+<lrt-select-competition-autocomplete
+  *ngIf="competitions$ | async as competitions"
+  [competitions]="competitions"
+  (select)="onSelectCompetiton($event)"
+></lrt-select-competition-autocomplete>
+
+<lrt-select-class-info-autocomplete
+  [classes]="(classes$ | async) || []"
+  (select)="onSelectClass($event)"
+></lrt-select-class-info-autocomplete>
+
+<mat-form-field class="example-full-width" appearance="fill">
+  <mat-label>Auto refresh (milliseconds)</mat-label>
+  <input type="number"
+    matInput
+    [step]="1000"
+    [value]="refreshRate"
+    (change)="onChangeRefreshRate($event)"
+  >
+</mat-form-field>
+<h2>Columns</h2>
+<lrt-column-select-drag-drop
+  [availableColumns]="availableColumns"
+  [selectedColumns]="columns"
+  (selectedColumnsChange)="onChangeColumns($event)"
+></lrt-column-select-drag-drop>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

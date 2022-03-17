@@ -1,5 +1,5 @@
-import { first, interval, Subject, takeUntil, Observable } from 'rxjs';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
+import { first, interval, Subject, takeUntil, Observable, startWith, Subscription } from 'rxjs';
 
 import {
   ClassResult,
@@ -13,11 +13,18 @@ import {
   templateUrl: './class-results.component.html',
   styleUrls: ['./class-results.component.scss']
 })
-export class ClassResultsComponent implements OnInit, OnDestroy {
+export class ClassResultsComponent implements OnDestroy {
 
   @Input() competitionId: string;
   @Input() className: string;
-  @Input() refreshRate: number|undefined;
+  intervalSubscription: Subscription|undefined;
+  @Input() set refreshRate(value: number|undefined) {
+    if(this.intervalSubscription !== undefined) {
+      this.intervalSubscription.unsubscribe();
+      this.intervalSubscription = undefined;
+    }
+    this.startTimer(value);
+  }
   @Input() columns: string[];
 
   classResults$: Subject<ClassResult> = new Subject();
@@ -34,11 +41,6 @@ export class ClassResultsComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  ngOnInit(): void {
-    this.refreshData();
-    this.startTimer();
-  }
-
   private refreshData(): void {
     this.getData()
       .pipe(
@@ -52,9 +54,10 @@ export class ClassResultsComponent implements OnInit, OnDestroy {
     return this.service.getClassResults(this.competitionId, this.className);
   }
 
-  private startTimer(): void {
-    if (this.refreshRate !== undefined) {
-      interval(this.refreshRate).pipe(
+  private startTimer(refreshRate: number|undefined): void {
+    if (refreshRate !== undefined && refreshRate >= 1000) {
+      this.intervalSubscription = interval(refreshRate).pipe(
+        startWith(0),
         takeUntil(this._destroy$),
       ).subscribe(n => {
         this.refreshData();

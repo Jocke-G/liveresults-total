@@ -1,12 +1,12 @@
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MatTableModule } from '@angular/material/table';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-
 import { SharedModule } from 'src/app/shared/shared.module';
+import { SharedMaterialModule } from 'src/app/shared/shared-material/shared-material.module';
 import { ClassResultsCollectionComponent } from './class-results-collection/class-results-collection.component';
 import { ClassResultsComponent } from './class-results/class-results.component';
+import { ClassResultsConfigComponent } from './class-results-config/class-results-config.component';
 
 
 
@@ -14,12 +14,12 @@ import { ClassResultsComponent } from './class-results/class-results.component';
   declarations: [
     ClassResultsComponent,
     ClassResultsCollectionComponent,
+    ClassResultsConfigComponent,
   ],
   imports: [
     CommonModule,
     SharedModule,
-    MatTableModule,
-    MatProgressBarModule,
+    SharedMaterialModule,
   ],
   exports: [
     ClassResultsComponent,
