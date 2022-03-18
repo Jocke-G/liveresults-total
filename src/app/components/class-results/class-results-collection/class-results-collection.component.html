@@ -20,24 +20,14 @@
     <td mat-cell *matCellDef="let result">{{ result.start | time }}</td>
   </ng-container>
 
-  <ng-container matColumnDef="result">
-    <th mat-header-cell *matHeaderCellDef>Resultat</th>
-    <td mat-cell *matCellDef="let result">{{ result.result }}</td>
+  <ng-container matColumnDef="finish">
+    <th mat-header-cell *matHeaderCellDef>Mål</th>
+    <td mat-cell *matCellDef="let result">{{ result | finish:(time$ | async) }}</td>
   </ng-container>
 
   <ng-container matColumnDef="timePlus">
-    <th mat-header-cell *matHeaderCellDef>+</th>
-    <td mat-cell *matCellDef="let result">{{ result.timeplus }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="rolling">
-    <th mat-header-cell *matHeaderCellDef>Rullande</th>
-    <td mat-cell *matCellDef="let result">{{ ((time$ | async) || 0) - result.start | time }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="clock">
-    <th mat-header-cell *matHeaderCellDef>Klocka</th>
-    <td mat-cell *matCellDef="let result">{{ ((time$ | async) || 0) | time }}</td>
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let result">{{ result.timeplus | timePlus }}</td>
   </ng-container>
 
   <ng-container matColumnDef="json">

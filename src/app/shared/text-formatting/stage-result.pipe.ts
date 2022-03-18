@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { StageResult } from '../components/total-class-results/stage-result';
+
+import { StageResult } from 'src/app/components/total-class-results/stage-result';
 import { TextFormattingService } from './text-formatting.service';
 
 @Pipe({

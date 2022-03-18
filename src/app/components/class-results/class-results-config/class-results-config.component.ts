@@ -17,10 +17,8 @@ export class ClassResultsConfigComponent implements OnInit {
     'name',
     'club',
     'start',
-    'result',
+    'finish',
     'timePlus',
-    'rolling',
-    'clock',
     'json',
   ];
   @Input() columns: string[];

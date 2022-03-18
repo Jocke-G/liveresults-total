@@ -2,7 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { map, Observable, interval, startWith } from 'rxjs';
 
-import { Result } from 'src/app/services/liveresults/models/result';
+import { TimeService } from 'src/app/shared/time.service';
+import {
+  Result,
+} from 'src/app/services/liveresults/models';
 
 @Component({
   selector: 'lrt-class-results-collection',
@@ -19,16 +22,17 @@ export class ClassResultsCollectionComponent implements OnInit {
   dataSource: MatTableDataSource<Result> = new MatTableDataSource();
   time$: Observable<number>;
 
+  constructor(
+    private timeService: TimeService,
+  ) {
+  }
+
   ngOnInit(): void {
     this.time$ = interval(10)
       .pipe(
         startWith(0),
         map(_ => {
-          const date = new Date();
-          const hours =  date.getHours() * 60 * 60;
-          const minutes =  date.getMinutes() * 60;
-          const seconds =  date.getSeconds();
-          return (hours + minutes + seconds) * 100;
+          return this.timeService.getTime();
         }),
       );
   }

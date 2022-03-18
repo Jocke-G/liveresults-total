@@ -1,15 +1,25 @@
 import { Injectable } from '@angular/core';
 
-import { Result, ResultStatus } from 'src/app/services/liveresults/models/result';
-import { StageResult } from '../components/total-class-results/stage-result';
+import { StageResult } from 'src/app/components/total-class-results/stage-result';
+import {
+  Result,
+  ResultStatus,
+} from 'src/app/services/liveresults/models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TextFormattingService {
 
+  formatTimePlus(value: string): string {
+    if(value === undefined || value === null || value === '')
+      return '';
+
+    return `+${this.formatTime(parseFloat(value))}`;
+  }
+
   formatTime(value: number|undefined): string {
-    if(value === undefined || value === null)
+    if(value === undefined || value === null || value < 0)
       return '';
 
     var hours = Math.floor(value / (60 * 60 * 100));
@@ -19,30 +29,34 @@ export class TextFormattingService {
     return ''.concat(`${hours > 0?hours.toString().concat(':'):''}${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`);
   }
 
-  formatStatus(status: number) {
+  formatRawStatus(status: ResultStatus): string {
+    return ResultStatus[status];
+  }
+
+  formatStatus(status: ResultStatus): string {
     switch(status){
-      case 0:
+      case ResultStatus.OK:
         return "OK";
-      case 1:
+      case ResultStatus.DID_NOT_START:
         return "Ej start";
-      case 2:
+      case ResultStatus.DID_NOT_FINISH:
         return "Ej godkänd";
-      case 3:
+      case ResultStatus.MISSED_PUNCH:
         return "Felstämplad";
-      case 4:
+      case ResultStatus.DISQUALIFIED:
         return "Diskvalificerad";
-      case 5:
+      case ResultStatus.OVER_TIME:
         return "Över maxtid";
-      case 9:
+      case ResultStatus.NOT_STARTED_YET_09:
         return "Ännu ej start";
-      case 10:
-        return "Ej start";
-        case 11:
+      case ResultStatus.NOT_STARTED_YET_10:
+        return "Ännu ej start";
+      case ResultStatus.WALK_OVER:
         return "Walk over";
-      case 12:
+      case ResultStatus.MOVED_UP:
         return "Moved up";
-        default:
-      return "?";
+      default:
+        return "?";
     }
   }
 

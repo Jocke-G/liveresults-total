@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+
 import { TextFormattingService } from './text-formatting.service';
 
 @Pipe({

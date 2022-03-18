@@ -1,18 +1,18 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Result } from '../services/liveresults/models';
+
 import { TextFormattingService } from './text-formatting.service';
 
 @Pipe({
-  name: 'result'
+  name: 'timePlus'
 })
-export class ResultPipe implements PipeTransform {
+export class TimePlusPipe implements PipeTransform {
 
   constructor(
     private service: TextFormattingService,
   ) {
   }
 
-  transform(value: Result): string {
-    return this.service.formatResult(value);
+  transform(value: string): string {
+    return this.service.formatTimePlus(value);
   }
 }
