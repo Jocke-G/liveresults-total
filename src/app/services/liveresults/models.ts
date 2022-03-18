@@ -4,3 +4,4 @@ export { ClassResult } from './models/class-result';
 export { CompetitionCollection } from './models/competition-collection';
 export { CompetitionInfo } from './models/competition-info';
 export { Result } from './models/result';
+export { ResultStatus } from './models/result';

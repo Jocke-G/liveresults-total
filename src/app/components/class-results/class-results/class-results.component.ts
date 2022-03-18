@@ -1,44 +1,56 @@
-import { Component, Input, OnDestroy } from '@angular/core';
-import { first, interval, Subject, takeUntil, Observable, startWith, Subscription } from 'rxjs';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { first, interval, Subject, takeUntil, Observable, startWith, Subscription, withLatestFrom, of, mergeMap } from 'rxjs';
 
+import { LiveresultsService } from 'src/app/services/liveresults/services';
+import { ResultCompareService } from 'src/app/shared/result-compare.service';
 import {
   ClassResult,
 } from 'src/app/services/liveresults/models';
-import {
-  LiveresultsService,
-} from 'src/app/services/liveresults/services';
 
 @Component({
   selector: 'lrt-class-results',
   templateUrl: './class-results.component.html',
   styleUrls: ['./class-results.component.scss']
 })
-export class ClassResultsComponent implements OnDestroy {
+export class ClassResultsComponent implements OnInit, OnDestroy {
 
   @Input() competitionId: string;
   @Input() className: string;
-  intervalSubscription: Subscription|undefined;
   @Input() set refreshRate(value: number|undefined) {
-    if(this.intervalSubscription !== undefined) {
-      this.intervalSubscription.unsubscribe();
-      this.intervalSubscription = undefined;
-    }
-    this.startTimer(value);
+    this.startInterval(value);
   }
   @Input() columns: string[];
 
-  classResults$: Subject<ClassResult> = new Subject();
+  classResults$: Observable<ClassResult> = new Subject();
 
-  private _destroy$ = new Subject();
+  private destroy$ = new Subject();
+  private intervalSubscription: Subscription|undefined;
+  private rawClassResults$: Subject<ClassResult> = new Subject();
 
   constructor(
     private service: LiveresultsService,
+    private compareService: ResultCompareService,
   ) {
   }
 
+  ngOnInit(): void {
+    this.classResults$ = interval(100).pipe(
+      startWith(0),
+      withLatestFrom(this.rawClassResults$),
+      mergeMap(([_, classResult]) => { return of(this.sort(classResult))}),
+      )
+  }
+
+  private sort(classResult: ClassResult): ClassResult {
+    return {
+      ...classResult,
+      results: classResult.results.sort(this.compareService.compareResults),
+    }
+  }
+
   ngOnDestroy(): void {
-    this._destroy$.next(undefined);
-    this._destroy$.complete();
+    this.destroy$.next(undefined);
+    this.destroy$.complete();
   }
 
   private refreshData(): void {
@@ -46,22 +58,29 @@ export class ClassResultsComponent implements OnDestroy {
       .pipe(
         first(),
       ).subscribe(classResult => {
-        this.classResults$.next(classResult);
+        this.rawClassResults$.next(classResult);
       })
   }
 
   private getData(): Observable<ClassResult> {
-    return this.service.getClassResults(this.competitionId, this.className);
+    return this.service.getClassResults(this.competitionId, this.className, true);
   }
 
-  private startTimer(refreshRate: number|undefined): void {
+  private startInterval(refreshRate: number|undefined): void {
+    if(this.intervalSubscription !== undefined) {
+      this.intervalSubscription.unsubscribe();
+      this.intervalSubscription = undefined;
+    }
+
     if (refreshRate !== undefined && refreshRate >= 1000) {
       this.intervalSubscription = interval(refreshRate).pipe(
         startWith(0),
-        takeUntil(this._destroy$),
+        takeUntil(this.destroy$),
       ).subscribe(n => {
         this.refreshData();
       });
+    } else {
+      this.refreshData();
     }
   }
 }
