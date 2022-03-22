@@ -1,52 +1,41 @@
 import { Injectable } from '@angular/core';
 
-import { TotalResult } from '../components/total-class-results/total-result';
-import { TimeService } from './time.service';
+import {
+  TotalResult,
+} from 'src/app/components/total-class-results/model';
 import {
   Result,
-  ResultStatus,
 } from 'src/app/services/liveresults/models';
+import { ResultHelperService } from './result-helper.service';
 
 const A_BEFORE_B: number = -1;
 const B_BEFORE_A: number = 1;
 const EQUAL: number = 0;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ResultCompareService {
 
   constructor(
-    private timeService: TimeService,
+    private helper: ResultHelperService,
   ) {
   }
 
   compareResults = (a: Result, b: Result): number => {
-    if(this.resultOk(a) && this.resultOk(b)) {
-      return this.getEffectiveTime(a) - this.getEffectiveTime(b);
+    if(this.helper.resultOk(a) && this.helper.resultOk(b)) {
+      return this.helper.getVirtualTime(a) - this.helper.getVirtualTime(b);
     }
 
-    if(this.resultOk(a) && !this.resultOk(b)) {
+    if(this.helper.resultOk(a) && !this.helper.resultOk(b)) {
       return A_BEFORE_B;
     }
 
-    if(this.resultOk(b) && !this.resultOk(a)) {
+    if(this.helper.resultOk(b) && !this.helper.resultOk(a)) {
       return B_BEFORE_A;
     }
 
     return EQUAL;
-  }
-
-  private resultOk(a: Result) {
-    return a.status === ResultStatus.OK || a.status === ResultStatus.NOT_STARTED_YET_10;
-  }
-
-  private getEffectiveTime(a: Result): number {
-    if (a.status === ResultStatus.OK) {
-      return parseFloat(a.result);
-    } else {
-      return this.timeService.getTime() - a.start;
-    }
   }
 
   compareTotalResults(competitionIds: string[]) {
@@ -56,20 +45,20 @@ export class ResultCompareService {
         let aStage = a.results.get(competitionId);
         let bStage = b.results.get(competitionId);
 
-        if(aStage?.totalOk && bStage?.totalOk) {
-          previousResult = a.totalTime - b.totalTime;
+        if(this.helper.possiblyOk(aStage) && this.helper.possiblyOk(bStage)) {
+          previousResult = ((aStage?.totalVirtualTime || 0) - (bStage?.totalVirtualTime || 0));
           continue;
         }
 
-        if(aStage?.totalOk && !bStage?.totalOk) {
+        if(this.helper.possiblyOk(aStage) && !this.helper.possiblyOk(bStage)) {
           return A_BEFORE_B;
         }
 
-        if(!aStage?.totalOk && bStage?.totalOk) {
+        if(!this.helper.possiblyOk(aStage) && this.helper.possiblyOk(bStage)) {
           return B_BEFORE_A;
         }
 
-        if(!aStage?.totalOk && !bStage?.totalOk) {
+        if(!this.helper.possiblyOk(aStage) && !this.helper.possiblyOk(bStage)) {
           return previousResult;
         }
       }

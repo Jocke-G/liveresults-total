@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { TextFormattingService } from './text-formatting.service';
 import {
   Result,
 } from 'src/app/services/liveresults/models';
+import { TextFormattingService } from './text-formatting.service';
 
 @Pipe({
-  name: 'result'
+  name: 'result',
 })
 export class ResultPipe implements PipeTransform {
 
@@ -15,7 +15,7 @@ export class ResultPipe implements PipeTransform {
   ) {
   }
 
-  transform(value: Result): string {
-    return this.service.formatResult(value);
+  transform(result: Result): string {
+    return this.service.formatResult(result);
   }
 }

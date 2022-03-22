@@ -23,24 +23,34 @@
       <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString())?.place }}</td>
     </ng-container>
 
-    <ng-container [matColumnDef]="competition.id+'_time'">
+    <ng-container [matColumnDef]="competition.id+'_start'">
+      <th mat-header-cell *matHeaderCellDef>Start</th>
+      <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString())?.start | time }}</td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="competition.id+'_finish'">
       <th mat-header-cell *matHeaderCellDef>Etapp</th>
-      <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString()) | stageResult }}</td>
+      <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString()) | finish:(time$ | async) }}</td>
     </ng-container>
 
     <ng-container [matColumnDef]="competition.id+'_timePlus'">
       <th mat-header-cell *matHeaderCellDef>Etapp+</th>
-      <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString())?.timePlus | timePlus }}</td>
+      <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString())?.timeplus | timePlus }}</td>
     </ng-container>
 
     <ng-container [matColumnDef]="competition.id+'_total'">
       <th mat-header-cell *matHeaderCellDef>Totalt</th>
-      <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString())?.totalTime | time }}</td>
+      <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString()) | total:(time$ | async) }}</td>
     </ng-container>
 
     <ng-container [matColumnDef]="competition.id+'_totalPlus'">
       <th mat-header-cell *matHeaderCellDef>Totalt+</th>
       <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString())?.totalPlus | timePlus }}</td>
+    </ng-container>
+
+    <ng-container [matColumnDef]="competition.id+'_totalPlace'">
+      <th mat-header-cell *matHeaderCellDef>Total #</th>
+      <td mat-cell *matCellDef="let result">{{ result.results.get(competition.id.toString())?.totalPlace }}</td>
     </ng-container>
 
     <ng-container [matColumnDef]="competition.id+'_json'">

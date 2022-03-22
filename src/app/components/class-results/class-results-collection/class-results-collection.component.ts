@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { map, Observable, interval, startWith } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { TimeService } from 'src/app/shared/time.service';
 import {
@@ -17,7 +17,14 @@ export class ClassResultsCollectionComponent implements OnInit {
   @Input() set results(results: Result[]) {
     this.dataSource.data = results;
   }
-  @Input() displayedColumns: string[] = ['place', 'name', 'club', 'result',];
+  @Input() displayedColumns: string[] = [
+    'place',
+    'name',
+    'club',
+    'start',
+    'finish',
+    'timePlus',
+  ];
 
   dataSource: MatTableDataSource<Result> = new MatTableDataSource();
   time$: Observable<number>;
@@ -28,12 +35,6 @@ export class ClassResultsCollectionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.time$ = interval(10)
-      .pipe(
-        startWith(0),
-        map(_ => {
-          return this.timeService.getTime();
-        }),
-      );
+    this.time$ = this.timeService.getTimeObservable();
   }
 }

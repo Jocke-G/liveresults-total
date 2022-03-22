@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { TextFormattingService } from './text-formatting.service';
 import {
   ResultStatus,
 } from 'src/app/services/liveresults/models';
+import { TextFormattingService } from './text-formatting.service';
 
 @Pipe({
-  name: 'rawStatus'
+  name: 'rawStatus',
 })
 export class RawStatusPipe implements PipeTransform {
 
@@ -15,7 +15,7 @@ export class RawStatusPipe implements PipeTransform {
   ) {
   }
 
-  transform(value: ResultStatus): unknown {
-    return this.service.formatRawStatus(value);
+  transform(resultStatus: ResultStatus): string {
+    return this.service.formatRawStatus(resultStatus);
   }
 }

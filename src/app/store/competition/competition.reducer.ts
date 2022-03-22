@@ -17,7 +17,9 @@ export const initialState: State = adapter.getInitialState({
 export const reducer = createReducer(
   initialState,
   on(CompetitionActions.loadCompetitions,
-    (state, action) => adapter.upsertMany(action.competitions, state))
+    (state, action) => adapter.upsertMany(action.competitions, state)),
+  on(CompetitionActions.loadCompetition,
+    (state, action) => adapter.upsertOne(action.competition, state)),
 )
 
 export const {

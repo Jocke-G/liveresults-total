@@ -6,6 +6,7 @@ export interface Result {
   status: ResultStatus;
   timeplus: string;
   progress: number;
+  splits?: {[key: string]: number};
   start: number;
 }
 

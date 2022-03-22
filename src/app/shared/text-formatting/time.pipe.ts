@@ -3,7 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { TextFormattingService } from './text-formatting.service';
 
 @Pipe({
-  name: 'time'
+  name: 'time',
 })
 export class TimePipe implements PipeTransform {
 
@@ -12,7 +12,7 @@ export class TimePipe implements PipeTransform {
   ) {
   }
 
-  transform(value: number): string {
-    return this.service.formatTime(value);
+  transform(time: number): string {
+    return this.service.formatTime(time);
   }
 }

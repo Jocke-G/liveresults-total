@@ -1,4 +1,6 @@
-import { StageResult } from './stage-result';
+import {
+  StageResult,
+} from '../model';
 
 export interface TotalResult {
   name: string;

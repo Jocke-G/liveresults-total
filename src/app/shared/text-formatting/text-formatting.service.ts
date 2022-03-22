@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import { StageResult } from 'src/app/components/total-class-results/stage-result';
+import {
+  StageResult,
+} from 'src/app/components/total-class-results/model';
 import {
   Result,
   ResultStatus,
@@ -66,19 +68,35 @@ export class TextFormattingService {
     }
     if(result.status === ResultStatus.OK) {
       return this.formatTime(parseInt(result.result));
-    } else {
-      return this.formatStatus(result.status);
     }
+
+    return this.formatStatus(result.status);
   }
 
-  formatStageResult(result: StageResult) {
+  formatFinish(result: Result | undefined, time: number | null): string {
     if(!result) {
-      return "-";
+      return '-';
     }
     if(result.status === ResultStatus.OK) {
-      return this.formatTime(result.time);
-    } else {
-      return this.formatStatus(result.status);
+      return this.formatTime(parseInt(result.result));
     }
+    if(result.status === ResultStatus.NOT_STARTED_YET_10 && time !== null) {
+      return `(${this.formatTime(time - result.start)})`;
+    }
+    return this.formatStatus(result.status);
+  }
+
+  formatTotal(result: StageResult | undefined, time: number | null): string {
+    if(!result) {
+      return '-';
+    }
+    if(result.status === ResultStatus.OK) {
+      return this.formatTime(result.totalTime);
+    }
+    if(result.status === ResultStatus.NOT_STARTED_YET_10 && time !== null) {
+      return `(${this.formatTime(result.totalVirtualTime)})`;
+    }
+
+    return "-";
   }
 }

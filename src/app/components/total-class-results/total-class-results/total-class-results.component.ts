@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Subject, Observable, forkJoin, map, filter, interval, takeUntil, first } from 'rxjs';
+import { Subject, Observable, forkJoin, map, filter, interval, takeUntil, first, startWith, withLatestFrom, mergeMap, of, Subscription, zip } from 'rxjs';
 
 import {
   ClassResult,
@@ -9,27 +9,35 @@ import { LiveresultsService } from 'src/app/services/liveresults/services';
 import { ResultCalcylateService } from 'src/app/shared/result-calcylator.service';
 import { ResultCompareService } from 'src/app/shared/result-compare.service';
 import { TotalResultConverterService } from 'src/app/shared/total-result-converter.service';
-import { TotalResult } from '../total-result';
+import {
+  TotalResult,
+} from '../model';
+import { TotalClassResultsFacadeService } from '../total-class-results-facade.service';
 
 @Component({
   selector: 'lrt-total-class-results',
   templateUrl: './total-class-results.component.html',
-  styleUrls: ['./total-class-results.component.scss']
+  styleUrls: ['./total-class-results.component.scss'],
 })
 export class TotalClassResultsComponent implements OnInit, OnDestroy {
 
   @Input() className: string;
   @Input() competitionIds: string[];
-  @Input() refreshRate: number|undefined;
+  @Input() set refreshRate(value: number|undefined) {
+    this.startInterval(value);
+  }
   @Input() stageColumns: string[];
   @Input() totalColumns: string[];
 
-  competitions$: Subject<CompetitionInfo[]> = new Subject<CompetitionInfo[]>();
-  results$: Subject<TotalResult[]> = new Subject<TotalResult[]>();
+  competitions$: Observable<CompetitionInfo[]>;
+  results$: Observable<TotalResult[]> = new Observable<TotalResult[]>();
 
-  private _destroy$ = new Subject();
+  private rawResults$: Subject<TotalResult[]> = new Subject<TotalResult[]>();
+  private intervalSubscription: Subscription|undefined;
+  private destroy$ = new Subject();
 
   constructor(
+    private facadeService: TotalClassResultsFacadeService,
     private service: LiveresultsService,
     private compareService: ResultCompareService,
     private convertService: TotalResultConverterService,
@@ -38,13 +46,21 @@ export class TotalClassResultsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._destroy$.next(undefined);
-    this._destroy$.complete();
+    this.destroy$.next(undefined);
+    this.destroy$.complete();
   }
 
   ngOnInit(): void {
-    this.refreshData();
-    this.startTimer();
+    this.competitions$ = zip(
+      this.competitionIds.map(competitionId =>
+        this.facadeService.getCompetitionInfo(competitionId)
+      ));
+
+    this.results$ = interval(100).pipe(
+      startWith(0),
+      withLatestFrom(this.rawResults$),
+      mergeMap(([_, result]) => { return of(this.sort(this.recalculate(result)))}),
+    )
   }
 
   private refreshData(): void {
@@ -52,14 +68,7 @@ export class TotalClassResultsComponent implements OnInit, OnDestroy {
       .pipe(
         first(),
       ).subscribe(classResult => {
-        this.results$.next(classResult);
-      })
-
-    this.getCompetitionInfo(this.competitionIds)
-      .pipe(
-        first(),
-      ).subscribe(competitions => {
-        this.competitions$.next(competitions);
+        this.rawResults$.next(classResult);
       })
   }
 
@@ -74,28 +83,36 @@ export class TotalClassResultsComponent implements OnInit, OnDestroy {
 
     return classResults$.pipe(
       map((tuples: [string, ClassResult][]) => {
-        const res = tuples.reduce((totalResults, classResult) => this.convertService.merge(totalResults, classResult), [] as TotalResult[]);
-        res.map(totalResult => this.calculateService.recalculateResult(totalResult, this.competitionIds));
-        return res.sort(this.compareService.compareTotalResults(this.competitionIds));
+        return tuples.reduce((totalResults, classResult) => this.convertService.merge(totalResults, classResult), [] as TotalResult[]);
       })
     );
   }
 
-  private getCompetitionInfo(competitionIds: string[]): Observable<CompetitionInfo[]> {
-    return forkJoin(
-      competitionIds.map(competitionId =>
-        this.service.getCompetitionInfo(competitionId)
-      )
-    );
+  private recalculate(totalResults: TotalResult[]): TotalResult[] {
+    totalResults.map(totalResult => this.calculateService.recalculateResult(totalResult, this.competitionIds));
+    this.calculateService.recalcylateRelativeResults(totalResults, this.competitionIds);
+    return totalResults;
   }
 
-  private startTimer(): void {
-    if (this.refreshRate !== undefined) {
-      interval(this.refreshRate).pipe(
-        takeUntil(this._destroy$),
+  private sort(totalResults: TotalResult[]): TotalResult[] {
+    return totalResults.sort(this.compareService.compareTotalResults(this.competitionIds));
+  }
+
+  private startInterval(refreshRate: number|undefined): void {
+    if(this.intervalSubscription !== undefined) {
+      this.intervalSubscription.unsubscribe();
+      this.intervalSubscription = undefined;
+    }
+
+    if (refreshRate !== undefined && refreshRate >= 1000) {
+      this.intervalSubscription = interval(refreshRate).pipe(
+        startWith(0),
+        takeUntil(this.destroy$),
       ).subscribe(n => {
         this.refreshData();
       });
+    } else {
+      this.refreshData();
     }
   }
 }

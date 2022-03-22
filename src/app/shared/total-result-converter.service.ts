@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
-import { TotalResult } from '../components/total-class-results/total-result';
-import { ClassResult, Result } from '../services/liveresults/models';
-import { ResultStatus } from '../services/liveresults/models/result';
-import { StageResult } from './../components/total-class-results/stage-result';
+
+import {
+  StageResult,
+  TotalResult,
+} from 'src/app/components/total-class-results/model';
+import {
+  ClassResult,
+  Result,
+} from 'src/app/services/liveresults/models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TotalResultConverterService {
 
@@ -39,10 +44,8 @@ export class TotalResultConverterService {
 
   private createStageResult(result: Result): StageResult {
     return <StageResult>{
-      status: result.status,
-      place: result.status===ResultStatus.OK?parseInt(result.place):undefined,
-      time: result.status===ResultStatus.OK?parseInt(result.result):undefined,
-      timePlus: result.status===ResultStatus.OK?parseInt(result.timeplus):undefined,
-    }
+      ...result,
+      splits: undefined,
+    };
   }
 }

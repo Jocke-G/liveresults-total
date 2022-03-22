@@ -1,8 +1,8 @@
-<ng-container *ngIf="{results: results$ | async , competitions: competitions$ | async} as nested">
+<ng-container *ngIf="{results: results$ | async , competitions: competitions$ | async} as obj">
   <lrt-total-class-results-collection
-    *ngIf="nested.results && nested.competitions"
-    [results]="nested.results"
-    [competitions]="nested.competitions"
+    *ngIf="obj.results && obj.competitions"
+    [results]="obj.results"
+    [competitions]="obj.competitions"
     [stageColumns]="stageColumns"
     [totalColumns]="totalColumns"
   ></lrt-total-class-results-collection>

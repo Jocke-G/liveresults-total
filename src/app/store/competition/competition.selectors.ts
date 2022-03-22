@@ -9,3 +9,13 @@ export const selectAllCompetitions = createSelector(
   state,
   fromCompetition.selectAll
 )
+
+export const selectEntities = createSelector(
+  state,
+  fromCompetition.selectEntities
+)
+
+export const selectCompetition = (id: string) => createSelector(
+  selectEntities,
+  entities => entities[id]
+);

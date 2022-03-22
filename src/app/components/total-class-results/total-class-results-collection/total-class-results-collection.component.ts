@@ -1,39 +1,62 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { CompetitionInfo } from 'src/app/services/liveresults/models';
+import { Observable } from 'rxjs';
 
-import { TotalResult } from '../total-result';
+import { CompetitionInfo } from 'src/app/services/liveresults/models';
+import { TimeService } from 'src/app/shared/time.service';
+
+import { TotalResult } from '../model';
 
 @Component({
   selector: 'lrt-total-class-results-collection',
   templateUrl: './total-class-results-collection.component.html',
   styleUrls: ['./total-class-results-collection.component.scss']
 })
-export class TotalClassResultsCollectionComponent implements OnChanges {
+export class TotalClassResultsCollectionComponent implements OnInit, OnChanges {
 
   @Input() competitions: CompetitionInfo[];
   @Input() set results(results: TotalResult[]) {
     this.dataSource.data = results;
   }
-  @Input() stageColumns: string[] = ['json',];
-  @Input() totalColumns: string[] = ['json',];
+  @Input() stageColumns: string[] = [
+    'place',
+    'start',
+    'finish',
+    'timePlus',
+    'total',
+  ];
+  @Input() totalColumns: string[] = [
+  ];
 
   dataSource: MatTableDataSource<TotalResult> = new MatTableDataSource();
-  displayedColumns: string[] = ['name', 'club'];
-  displayedHeaderColumns: string[] = ['before-dummy', 'after-dummy'];
+  displayedColumns: string[];
+  displayedHeaderColumns: string[];
+  time$: Observable<number>;
+
+  constructor(
+    private timeService: TimeService,
+  ) {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     const newCompetitions = changes['competitions'];
     if(newCompetitions !== undefined) {
-      const competitions: CompetitionInfo[] = newCompetitions.currentValue as CompetitionInfo[];
-      this.displayedHeaderColumns = ['before-dummy', ...competitions.map(competition => competition.id.toString()), 'after-dummy'];
+      this.calculateColumns();
+    }
+  }
 
-      let competitionColumns: string[] = this.competitions
-        .map(competition=> this.getColumnsForCompetition(competition.id.toString(), this.stageColumns))
-        .reduce((accumulator, value) => accumulator.concat(value), []);
+  private calculateColumns() {
+    this.displayedHeaderColumns = ['before-dummy', ...this.competitions.map(competition => competition.id.toString()), ...this.totalColumns.length > 0 ? ['after-dummy'] : []];
 
-      this.displayedColumns = ['name', 'club', ...competitionColumns, ...this.totalColumns];
-      }
+    let competitionColumns: string[] = this.competitions
+      .map(competition => this.getColumnsForCompetition(competition.id.toString(), this.stageColumns))
+      .reduce((accumulator, value) => accumulator.concat(value), []);
+
+    this.displayedColumns = ['name', 'club', ...competitionColumns, ...this.totalColumns];
+  }
+
+  ngOnInit(): void {
+    this.time$ = this.timeService.getTimeObservable();
   }
 
   private getColumnsForCompetition(competitionId: string, columns: string[]): string[] {

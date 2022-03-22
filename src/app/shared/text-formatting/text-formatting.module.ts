@@ -4,10 +4,10 @@ import { CommonModule } from '@angular/common';
 import { FinishPipe } from './finish.pipe';
 import { RawStatusPipe } from './raw-status.pipe';
 import { ResultPipe } from './result.pipe';
-import { StageResultPipe } from './stage-result.pipe';
 import { StatusPipe } from './status.pipe';
 import { TimePipe } from './time.pipe';
 import { TimePlusPipe } from './time-plus.pipe';
+import { TotalPipe } from './total.pipe';
 
 
 
@@ -16,10 +16,10 @@ import { TimePlusPipe } from './time-plus.pipe';
     FinishPipe,
     RawStatusPipe,
     ResultPipe,
-    StageResultPipe,
     StatusPipe,
     TimePipe,
     TimePlusPipe,
+    TotalPipe,
   ],
   imports: [
     CommonModule,
@@ -28,10 +28,10 @@ import { TimePlusPipe } from './time-plus.pipe';
     FinishPipe,
     RawStatusPipe,
     ResultPipe,
-    StageResultPipe,
     StatusPipe,
     TimePipe,
     TimePlusPipe,
+    TotalPipe,
   ],
 })
 export class TextFormattingModule { }
