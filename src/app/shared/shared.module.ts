@@ -1,32 +1,39 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { SharedMaterialModule } from 'src/app/shared/shared-material/shared-material.module';
 import { ColumnSelectDragDropComponent } from './column-select-drag-drop/column-select-drag-drop.component';
 import { SelectClassInfoAutocompleteComponent } from './class-info/select-class-info-autocomplete/select-class-info-autocomplete.component';
 import { SelectCompetitionAutocompleteComponent } from './competition/select-competition-autocomplete/select-competition-autocomplete.component';
+import { SelectCompetitionAutocompleteMultiComponent } from './competition/select-competition-autocomplete-multi/select-competition-autocomplete-multi.component';
 import { TextFormattingModule } from './text-formatting/text-formatting.module';
+import { SettingsButtonComponent } from './settings-button/settings-button.component';
+import { FooterComponent } from './footer/footer.component';
 
 
 @NgModule({
   declarations: [
     ColumnSelectDragDropComponent,
+    FooterComponent,
     SelectClassInfoAutocompleteComponent,
     SelectCompetitionAutocompleteComponent,
+    SelectCompetitionAutocompleteMultiComponent,
+    SettingsButtonComponent,
   ],
   imports: [
     CommonModule,
-    DragDropModule,
     SharedMaterialModule,
     ReactiveFormsModule,
     TextFormattingModule,
   ],
   exports: [
     ColumnSelectDragDropComponent,
+    FooterComponent,
     SelectClassInfoAutocompleteComponent,
     SelectCompetitionAutocompleteComponent,
+    SelectCompetitionAutocompleteMultiComponent,
+    SettingsButtonComponent,
     TextFormattingModule,
   ],
 })

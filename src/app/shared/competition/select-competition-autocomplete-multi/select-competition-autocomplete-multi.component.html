@@ -1,0 +1,26 @@
+<mat-form-field class="example-full-width" appearance="fill">
+  <mat-chip-list #chipList  cdkDropList (cdkDropListDropped)="drop($event)"
+  cdkDropListOrientation="horizontal" aria-label="Competition selection">
+    <mat-chip
+      cdkDrag
+      *ngFor="let competition of selectedCompetitions"
+      selectable=true
+      removable=true
+      (removed)="remove(competition)">
+      {{ displayFn(competition) }}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+    <input
+      placeholder="Type to add..."
+      #competitionInput
+      #trigger="matAutocompleteTrigger"
+      [formControl]="formControl"
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipList">
+  </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)" autoActiveFirstOption="true">
+    <mat-option *ngFor="let competition of filteredCompetitions$ | async" [value]="competition" (click)="$event.stopPropagation(); trigger.openPanel()">
+      {{ displayFn(competition)}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

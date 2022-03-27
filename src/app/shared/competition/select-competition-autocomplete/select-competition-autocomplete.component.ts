@@ -13,6 +13,7 @@ import { CompetitionInfo } from 'src/app/services/liveresults/models';
 export class SelectCompetitionAutocompleteComponent implements OnInit {
 
   @Input() competitions: CompetitionInfo[];
+  @Input() value: number;
   @Output() select: EventEmitter<CompetitionInfo> = new EventEmitter();
 
   formControl = new FormControl();

@@ -1,0 +1,16 @@
+footer {
+  bottom: 0px;
+  position: fixed;
+  width: 100%;
+  border-top: 1px solid black;
+  padding: 0.3em;
+}
+
+footer a {
+  text-decoration: none;
+  color: black;
+}
+
+footer .icon {
+  max-height: 1em;
+}

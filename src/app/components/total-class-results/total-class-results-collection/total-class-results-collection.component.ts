@@ -40,7 +40,8 @@ export class TotalClassResultsCollectionComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     const newCompetitions = changes['competitions'];
-    if(newCompetitions !== undefined) {
+    const newStageColumns = changes['stageColumns'];
+    if(newCompetitions !== undefined || newStageColumns !== undefined) {
       this.calculateColumns();
     }
   }

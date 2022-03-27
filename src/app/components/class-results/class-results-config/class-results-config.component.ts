@@ -23,6 +23,7 @@ export class ClassResultsConfigComponent implements OnInit {
   ];
   @Input() columns: string[];
   @Input() refreshRate: number|undefined;
+  @Input() competition: number;
 
   @Output() setRefreshRate: EventEmitter<number> = new EventEmitter();
   @Output() selectCompetition: EventEmitter<CompetitionInfo> = new EventEmitter();
