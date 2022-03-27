@@ -5,10 +5,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import * as Sentry from "@sentry/angular";
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PagesModule } from './pages/pages.module';
+import { AppRoutingModule } from './app-routing.module';
+import { DialogsModule } from './dialogs/dialogs.module';
 import { EnvServiceProvider } from './services/environment/env.service.provider';
+import { PagesModule } from './pages/pages.module';
 import { RootStoreModule } from './store/root-store.module';
 
 @NgModule({
@@ -21,6 +22,7 @@ import { RootStoreModule } from './store/root-store.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     PagesModule,
+    DialogsModule,
     RootStoreModule,
   ],
   providers: [

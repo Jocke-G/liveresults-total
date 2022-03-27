@@ -8,7 +8,7 @@ import { ClassResultsConfigComponent } from 'src/app/components/class-results/cl
 @Component({
   selector: 'lrt-class-results-page',
   templateUrl: './class-results-page.component.html',
-  styleUrls: ['./class-results-page.component.scss']
+  styleUrls: ['./class-results-page.component.scss'],
 })
 export class ClassResultsPageComponent implements OnInit, OnDestroy {
 
@@ -47,6 +47,7 @@ export class ClassResultsPageComponent implements OnInit, OnDestroy {
     const ref = this.dialog.open(ClassResultsConfigComponent);
     ref.componentInstance.columns = this.columns;
     ref.componentInstance.refreshRate = this.refreshRate;
+    ref.componentInstance.competition = parseInt(this.competitionId);
     ref.componentInstance.selectCompetition.subscribe(_ => {
       this.router.navigate([], {
         relativeTo: this.route,

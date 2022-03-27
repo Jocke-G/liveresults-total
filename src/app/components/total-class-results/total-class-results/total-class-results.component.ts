@@ -22,7 +22,11 @@ import { TotalClassResultsFacadeService } from '../total-class-results-facade.se
 export class TotalClassResultsComponent implements OnInit, OnDestroy {
 
   @Input() className: string;
-  @Input() competitionIds: string[];
+  @Input('competitionIds') set setCompetitionIds(value: string[]) {
+    this.competitionIds = value;
+    this.getCompetitionInfo();
+  }
+  competitionIds: string[];
   @Input() set refreshRate(value: number|undefined) {
     this.startInterval(value);
   }
@@ -51,16 +55,19 @@ export class TotalClassResultsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.competitions$ = zip(
-      this.competitionIds.map(competitionId =>
-        this.facadeService.getCompetitionInfo(competitionId)
-      ));
+    this.getCompetitionInfo();
 
     this.results$ = interval(100).pipe(
       startWith(0),
       withLatestFrom(this.rawResults$),
       mergeMap(([_, result]) => { return of(this.sort(this.recalculate(result)))}),
     )
+  }
+
+  private getCompetitionInfo() {
+    this.competitions$ = zip(
+      this.competitionIds.map(competitionId => this.facadeService.getCompetitionInfo(competitionId)
+      ));
   }
 
   private refreshData(): void {

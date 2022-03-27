@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
@@ -13,10 +13,18 @@ import { ClassInfo } from 'src/app/services/liveresults/models';
 export class SelectClassInfoAutocompleteComponent implements OnInit {
 
   @Input() classes: ClassInfo[];
+  @Input() value: ClassInfo|undefined;
   @Output() select: EventEmitter<ClassInfo> = new EventEmitter();
 
   formControl = new FormControl();
   filteredClasses$: Observable<ClassInfo[]>;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const newClassInfo = changes['value'];
+    if(newClassInfo !== undefined && newClassInfo.currentValue !== undefined) {
+      this.formControl.setValue(newClassInfo.currentValue)
+    }
+  }
 
   ngOnInit(): void {
     this.filteredClasses$ = this.formControl.valueChanges.pipe(

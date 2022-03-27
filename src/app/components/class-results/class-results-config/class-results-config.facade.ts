@@ -17,7 +17,7 @@ export class ClassResultsConfigFacadeService {
 
   constructor(
     private store: Store,
-    private service: LiveresultsService
+    private service: LiveresultsService,
   ) {
   }
 

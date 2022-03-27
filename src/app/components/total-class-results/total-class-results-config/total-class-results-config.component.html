@@ -1,0 +1,35 @@
+<ng-container
+  *ngIf="{competitions: competitions$ | async , value: value$ | async} as obj"
+>
+  <lrt-select-competition-autocomplete-multi
+  *ngIf="obj.competitions && obj.value"
+  [competitions]="obj.competitions"
+  (select)="onSelect($event)"
+  [value]="obj.value"
+  ></lrt-select-competition-autocomplete-multi>
+</ng-container>
+
+<lrt-select-class-info-autocomplete
+  [classes]="(classes$ | async) || []"
+  (select)="onSelectClass($event)"
+  [value]="(selectedClass$ | async) || undefined"
+>
+</lrt-select-class-info-autocomplete>
+
+<mat-form-field class="example-full-width" appearance="fill">
+  <mat-label>Auto refresh (milliseconds)</mat-label>
+  <input type="number"
+    matInput
+    [step]="1000"
+    [value]="refreshRate"
+    (change)="onChangeRefreshRate($event)"
+  >
+</mat-form-field>
+
+<h2>Columns</h2>
+<lrt-column-select-drag-drop
+  [availableColumns]="availableStageColumns"
+  [selectedColumns]="stageColumns"
+  (selectedColumnsChange)="onChangeStageColumns($event)"
+></lrt-column-select-drag-drop>
+

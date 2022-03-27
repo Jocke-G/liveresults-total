@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Konfigurera</h2>
+<mat-dialog-content>
+  <lrt-total-class-results-config
+    [className]="data.className"
+    (changeClassName)="onChangeClassName($event)"
+    [competitionIds]="data.competitionIds"
+    (changeCompetitionIds)="onChangeCompetitionIds($event)"
+    [refreshRate]="data.refreshRate"
+    (changeRefreshRate)="onChangeRefreshRate($event)"
+    [stageColumns]="data.stageColumns"
+    (changeStageColumns)="onChangeStageColumns($event)"
+  ></lrt-total-class-results-config>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
