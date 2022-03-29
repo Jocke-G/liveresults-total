@@ -14,7 +14,7 @@ export class SelectClassInfoAutocompleteComponent implements OnInit {
 
   @Input() classes: ClassInfo[];
   @Input() value: ClassInfo|undefined;
-  @Output() select: EventEmitter<ClassInfo> = new EventEmitter();
+  @Output() select: EventEmitter<string> = new EventEmitter();
 
   formControl = new FormControl();
   filteredClasses$: Observable<ClassInfo[]>;
@@ -36,11 +36,19 @@ export class SelectClassInfoAutocompleteComponent implements OnInit {
   }
 
   onOptionSelected($event: MatAutocompleteSelectedEvent): void {
-    this.select.emit($event.option.value);
+    const classInfo: ClassInfo = $event.option.value;
+    this.select.emit(classInfo.className);
   }
 
-  displayFn(classInfo: ClassInfo): string {
+  displayFn(classInfo: ClassInfo|string): string {
+    if(typeof classInfo === 'string') {
+      return classInfo;
+    }
     return classInfo ? `${classInfo.className}` : '';
+  }
+
+  on($event: any) {
+    this.select.emit($event.target.value);
   }
 
   private filter(value: string): ClassInfo[] {

@@ -49,8 +49,8 @@ export class TotalClassResultsConfigComponent implements OnInit {
     this.changeCompetitionIds.emit(competitions.map(competition => competition.id.toString()));
   }
 
-  onSelectClass(classInfo: ClassInfo) {
-    this.changeClassName.emit(classInfo.className);
+  onSelectClass(className: string) {
+    this.changeClassName.emit(className);
   }
 
   onChangeRefreshRate($event: Event) {

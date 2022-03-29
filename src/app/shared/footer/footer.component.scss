@@ -4,6 +4,7 @@ footer {
   width: 100%;
   border-top: 1px solid black;
   padding: 0.3em;
+  background-color: white;
 }
 
 footer a {
@@ -12,5 +13,6 @@ footer a {
 }
 
 footer .icon {
-  max-height: 1em;
+  height: 1.2em;
+  margin-bottom: -0.2em;
 }

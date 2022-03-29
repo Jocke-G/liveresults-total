@@ -18,7 +18,7 @@
       [matAutocomplete]="auto"
       [matChipInputFor]="chipList">
   </mat-chip-list>
-  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)" autoActiveFirstOption="true">
+  <mat-autocomplete panelWidth="auto" #auto="matAutocomplete" (optionSelected)="selected($event)" autoActiveFirstOption="true">
     <mat-option *ngFor="let competition of filteredCompetitions$ | async" [value]="competition" (click)="$event.stopPropagation(); trigger.openPanel()">
       {{ displayFn(competition)}}
     </mat-option>

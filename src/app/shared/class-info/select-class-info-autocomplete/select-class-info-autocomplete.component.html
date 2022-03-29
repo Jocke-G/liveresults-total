@@ -6,6 +6,7 @@
     matInput
     [formControl]="formControl"
     [matAutocomplete]="auto"
+    (blur)="on($event)"
   >
   <mat-autocomplete
     #auto="matAutocomplete"

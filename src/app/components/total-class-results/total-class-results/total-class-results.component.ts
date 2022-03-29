@@ -13,6 +13,7 @@ import {
   TotalResult,
 } from '../model';
 import { TotalClassResultsFacadeService } from '../total-class-results-facade.service';
+import { TimeService } from 'src/app/shared/time.service';
 
 @Component({
   selector: 'lrt-total-class-results',
@@ -21,7 +22,11 @@ import { TotalClassResultsFacadeService } from '../total-class-results-facade.se
 })
 export class TotalClassResultsComponent implements OnInit, OnDestroy {
 
-  @Input() className: string;
+  @Input('className') set setClassName(value: string) {
+    this.className = value;
+    this.refreshData();
+  }
+  className: string;
   @Input('competitionIds') set setCompetitionIds(value: string[]) {
     this.competitionIds = value;
     this.getCompetitionInfo();
@@ -46,6 +51,7 @@ export class TotalClassResultsComponent implements OnInit, OnDestroy {
     private compareService: ResultCompareService,
     private convertService: TotalResultConverterService,
     private calculateService: ResultCalcylateService,
+    private timeService: TimeService,
   ) {
   }
 
@@ -57,8 +63,7 @@ export class TotalClassResultsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getCompetitionInfo();
 
-    this.results$ = interval(100).pipe(
-      startWith(0),
+    this.results$ = this.timeService.getTimeObservable().pipe(
       withLatestFrom(this.rawResults$),
       mergeMap(([_, result]) => { return of(this.sort(this.recalculate(result)))}),
     )

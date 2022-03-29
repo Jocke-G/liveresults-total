@@ -27,12 +27,11 @@ export class ClassResultsConfigComponent implements OnInit {
 
   @Output() setRefreshRate: EventEmitter<number> = new EventEmitter();
   @Output() selectCompetition: EventEmitter<CompetitionInfo> = new EventEmitter();
-  @Output() selectClass: EventEmitter<ClassInfo> = new EventEmitter();
+  @Output() selectClass: EventEmitter<string> = new EventEmitter();
 
   competitions$: Observable<CompetitionInfo[]>;
   selectedCompetition: CompetitionInfo;
   classes$: Observable<ClassInfo[]>;
-  selectedClass: ClassInfo;
 
   constructor(
     private facade: ClassResultsConfigFacadeService,
@@ -58,8 +57,7 @@ export class ClassResultsConfigComponent implements OnInit {
     this.classes$ = this.facade.getClasses(competition.id.toString());
   }
 
-  onSelectClass(classInfo: ClassInfo): void {
-    this.selectedClass = classInfo;
+  onSelectClass(classInfo: string): void {
     this.selectClass.emit(classInfo);
   }
 
