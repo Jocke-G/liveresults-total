@@ -1,6 +1,6 @@
 <table mat-table [dataSource]="dataSource" class="table-responsive">
 
-  <ng-container matColumnDef="name" sticky>
+  <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>Namn</th>
     <td mat-cell *matCellDef="let result">{{ result.name }}</td>
   </ng-container>
