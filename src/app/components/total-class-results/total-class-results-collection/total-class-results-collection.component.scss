@@ -9,7 +9,6 @@
       display: table;
       border-collapse: collapse;
       margin: 0px;
-
   }
   .mat-row{
     height: 30px;
@@ -31,7 +30,10 @@
       white-space: nowrap;
       overflow: hidden;
       vertical-align: middle;
-  }
+      @media (max-width: 900px) {
+        font-size: 8px;
+      }
+    }
 
   .mat-row:hover .mat-cell {
     background-color: darkgrey;
