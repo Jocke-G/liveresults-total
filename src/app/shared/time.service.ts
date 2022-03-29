@@ -7,9 +7,9 @@ import { interval, map, Observable, startWith } from 'rxjs';
 export class TimeService {
 
   getTimeObservable(): Observable<number> {
-    return interval(10)
+    return interval(1000)
       .pipe(
-        startWith(0),
+        startWith(this.getTime()),
         map(_ => {
           return this.getTime();
         }),

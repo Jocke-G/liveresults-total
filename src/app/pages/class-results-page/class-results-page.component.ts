@@ -59,7 +59,7 @@ export class ClassResultsPageComponent implements OnInit, OnDestroy {
       this.router.navigate([], {
         relativeTo: this.route,
         queryParamsHandling: 'merge',
-        queryParams: { className: _.className }
+        queryParams: { className: _ }
       });
     })
     ref.componentInstance.setRefreshRate.subscribe(_ => {
