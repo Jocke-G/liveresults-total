@@ -5,6 +5,6 @@
   [stageColumns]="stageColumns"
   [totalColumns]="totalColumns"
   [refreshRate]="refreshRate"
+  (selectClass)="onSelectClass($event)"
+  (toggleSettings)="onToggleSettings()"
 ></lrt-total-class-results>
-
-<lrt-settings-button (clickSettings)="onClickSettings()"></lrt-settings-button>

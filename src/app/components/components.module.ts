@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { SharedModule } from 'src/app/shared/shared.module';
 import { ClassResultsModule } from './class-results/class-results.module';
 import { TotalClassResultsModule } from './total-class-results/total-class-results.module';
 
@@ -11,6 +12,7 @@ import { TotalClassResultsModule } from './total-class-results/total-class-resul
   ],
   imports: [
     CommonModule,
+    SharedModule,
   ],
   exports: [
     ClassResultsModule,
