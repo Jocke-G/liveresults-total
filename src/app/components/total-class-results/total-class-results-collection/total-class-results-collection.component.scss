@@ -1,7 +1,7 @@
 .table-responsive {
   display: block;
   overflow: auto;
-  height: calc(100% - 2em);
+  height: calc(100% - 5.5em);
   .mat-table {
       width: 100%;
       max-width: 100%;
@@ -10,16 +10,14 @@
       border-collapse: collapse;
       margin: 0px;
   }
-  .mat-row{
-    height: 30px;
-  }
   .mat-row:nth-child(even){
     background-color: whitesmoke;
   }
   .mat-row,
   .mat-header-row {
       display: table-row;
-  }
+      height: 30px;
+    }
   .mat-cell,
   .mat-header-cell {
       word-wrap: initial;

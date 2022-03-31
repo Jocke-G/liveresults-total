@@ -6,6 +6,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { TotalClassResultsConfigDialogComponent } from 'src/app/dialogs/total-class-results-config-dialog/total-class-results-config-dialog.component';
 import { TotalClassResultsConfigDialogData } from 'src/app/dialogs/total-class-results-config-dialog/total-class-results-config-dialog-data';
 
+import { ClassInfo } from './../../services/liveresults/models/class-info';
+
 @Component({
   selector: 'lrt-total-class-results-page',
   templateUrl: './total-class-results-page.component.html',
@@ -40,6 +42,11 @@ export class TotalClassResultsPageComponent implements OnInit, OnDestroy {
   ) {
   }
 
+
+  onSelectClass(classInfo: ClassInfo) {
+    this.navigateClass(classInfo.className);
+  }
+
   private toggleConfigDialog() {
     if (this.hideConfigDialog) {
       this.openConfigDialog();
@@ -69,11 +76,7 @@ export class TotalClassResultsPageComponent implements OnInit, OnDestroy {
     });
 
     dialogComponent.changeClassName.subscribe(className => {
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParamsHandling: 'merge',
-        queryParams: { className: className, }
-      });
+      this.navigateClass(className);
     });
 
     dialogComponent.changeRefreshRate.subscribe(refreshRate => {
@@ -94,6 +97,14 @@ export class TotalClassResultsPageComponent implements OnInit, OnDestroy {
 
     this.dialogRef.afterClosed().subscribe(result => {
       this.setHideConfigDialog(true);
+    });
+  }
+
+  private navigateClass(className: string) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParamsHandling: 'merge',
+      queryParams: { className: className, }
     });
   }
 
@@ -149,6 +160,10 @@ export class TotalClassResultsPageComponent implements OnInit, OnDestroy {
   }
 
   onClickSettings() {
+    this.toggleConfigDialog();
+  }
+
+  onToggleSettings() {
     this.toggleConfigDialog();
   }
 }

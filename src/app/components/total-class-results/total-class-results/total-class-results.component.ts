@@ -1,7 +1,8 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Subject, Observable, forkJoin, map, filter, interval, takeUntil, first, startWith, withLatestFrom, mergeMap, of, Subscription, zip } from 'rxjs';
 
 import {
+  ClassInfo,
   ClassResult,
   CompetitionInfo,
 } from 'src/app/services/liveresults/models';
@@ -30,6 +31,9 @@ export class TotalClassResultsComponent implements OnInit, OnDestroy {
   @Input('competitionIds') set setCompetitionIds(value: string[]) {
     this.competitionIds = value;
     this.getCompetitionInfo();
+    if(value.length > 0) {
+      this.classes$ = this.facadeService.getClasses(value[0]);
+    }
   }
   competitionIds: string[];
   @Input() set refreshRate(value: number|undefined) {
@@ -37,9 +41,12 @@ export class TotalClassResultsComponent implements OnInit, OnDestroy {
   }
   @Input() stageColumns: string[];
   @Input() totalColumns: string[];
+  @Output() selectClass: EventEmitter<ClassInfo> = new EventEmitter();
+  @Output() toggleSettings: EventEmitter<void> = new EventEmitter();
 
   competitions$: Observable<CompetitionInfo[]>;
   results$: Observable<TotalResult[]> = new Observable<TotalResult[]>();
+  classes$: Observable<ClassInfo[]>;
 
   private rawResults$: Subject<TotalResult[]> = new Subject<TotalResult[]>();
   private intervalSubscription: Subscription|undefined;
@@ -53,6 +60,14 @@ export class TotalClassResultsComponent implements OnInit, OnDestroy {
     private calculateService: ResultCalcylateService,
     private timeService: TimeService,
   ) {
+  }
+
+  onSelectClass($event: ClassInfo) {
+    this.selectClass.emit($event);
+  }
+
+  onToggleSettings() {
+    this.toggleSettings.emit();
   }
 
   ngOnDestroy(): void {

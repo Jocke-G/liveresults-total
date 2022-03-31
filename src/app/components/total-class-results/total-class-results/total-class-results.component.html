@@ -1,4 +1,17 @@
 <ng-container *ngIf="{results: results$ | async , competitions: competitions$ | async} as obj">
+  <lrt-select-class-info
+  style="margin: 4px;"
+    [classes]="(classes$ | async) || []"
+    [value]="className"
+    (select)="onSelectClass($event)"
+  ></lrt-select-class-info>
+  <button mat-raised-button
+    (click)="onToggleSettings()"
+    style="margin: 10px; float:right"
+    color="primary" aria-label="Settings" class="settings-button">
+    <mat-icon>settings</mat-icon>
+  </button>
+
   <lrt-total-class-results-collection
     *ngIf="obj.results && obj.competitions"
     [results]="obj.results"
